@@ -147,16 +147,7 @@ echo "Done!"
 
 $AFTER_BUILD
 
-if [ $PUSH_TO_DEVICE = 1 ]; then
-
+if [ $PUSH_TO_DEVICE = 1 ]; then 
   cp ./$APP_NAME.xpi /home/geo/Dropbox/Public/$APP_NAME.xpi
-  
   echo "Uploading..."
-  sleep 7
-  echo "READY!"
-  
-  adb shell am start -a android.intent.action.VIEW \
-                     -c android.intent.category.DEFAULT \
-                     -d http://dl.dropbox.com/u/1561311/$APP_NAME.xpi
-  echo "Pushed $APP_NAME.xpi to $ANDROID_APP_ID"
 fi
