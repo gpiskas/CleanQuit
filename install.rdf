@@ -5,13 +5,12 @@
         <em:id>cleanquit@geopiskas.com</em:id>
         <em:type>2</em:type>
         <em:name>CleanQuit</em:name>
-        <em:version>1.0</em:version>
+        <em:version>1.1</em:version>
         <em:bootstrap>true</em:bootstrap>
         <em:description>Clean up the mess and quit!</em:description>
         <em:creator>Geo Piskas</em:creator>
 	<em:optionsURL>chrome://cleanquit/content/options.xul</em:optionsURL>
         <em:optionsType>2</em:optionsType>
-        <em:iconURL>chrome://cleanquit/skin/image.png</em:iconURL>
 
         <em:targetApplication>
             <Description>

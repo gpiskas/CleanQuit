@@ -15,11 +15,20 @@ function isNativeUI() {
 }
 
 function cleanAndQuit(window) {
-  
   let branch = Services.prefs.getBranch(branchName);
   
   // Use the window's sanitizer to clean the session
-  let san = new window.Sanitizer();
+  let san = null;
+  let userAgent = window.navigator.userAgent.toLowerCase();
+  let version = parseFloat(userAgent.substring(userAgent.indexOf('firefox/')+8));
+  if(version<21) {
+    san = new window.Sanitizer();
+  } else {
+    Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+    Cu.import("resource:///modules/Sanitizer.jsm");
+    san = Sanitizer;
+  }
+
   if (branch.getBoolPref("cache")){
     san.clearItem("cache");
   }
@@ -60,8 +69,8 @@ function loadIntoWindow(window) {
     return;
 
   if (isNativeUI()) {
-    let iconUrl = gAddonData.resourceURI.spec + "image.png";
-    qQuitBtn = window.NativeWindow.menu.add("Quit", iconUrl, function() { cleanAndQuit(window); });
+    let iconUrl = gAddonData.resourceURI.spec + "icon.png";
+    qQuitBtn = window.NativeWindow.menu.add("CleanQuit", iconUrl, function() { cleanAndQuit(window); });
   }
 }
 
