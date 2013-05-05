@@ -9,7 +9,6 @@
     onload="window.close();">   <!-- Close window if it gets opened directly for some reason -->
   <setting pref="extensions.cleanquit.cache" type="bool" title="&cache;"/>
   <setting pref="extensions.cleanquit.cookies" type="bool" title="&cookies;"/>
-  <!--<setting pref="extensions.cleanquit.geolocation" type="bool" title="&geolocation;"/>-->
   <setting pref="extensions.cleanquit.sitesettings" type="bool" title="&sitesettings;"/>
   <setting pref="extensions.cleanquit.offlineapps" type="bool" title="&offlineapps;"/>
   <setting pref="extensions.cleanquit.history" type="bool" title="&history;"/>

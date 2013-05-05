@@ -16,12 +16,14 @@ function isNativeUI() {
 
 function cleanAndQuit(window) {
   let branch = Services.prefs.getBranch(branchName);
-  
+
   // Use the window's sanitizer to clean the session
   let san = null;
-  let userAgent = window.navigator.userAgent.toLowerCase();
-  let version = parseFloat(userAgent.substring(userAgent.indexOf('firefox/')+8));
-  if(version<21) {
+  var appInfo = Components.classes["@mozilla.org/xre/app-info;1"]
+  		.getService(Components.interfaces.nsIXULAppInfo);
+  var versionChecker = Components.classes["@mozilla.org/xpcom/version-comparator;1"]
+  		.getService(Components.interfaces.nsIVersionComparator);
+  if(versionChecker.compare(appInfo.version, "21") < 0) {
     san = new window.Sanitizer();
   } else {
     Cu.import("resource://gre/modules/XPCOMUtils.jsm");
@@ -35,9 +37,6 @@ function cleanAndQuit(window) {
   if (branch.getBoolPref("cookies")){
     san.clearItem("cookies");
   }
-  //if (branch.getBoolPref("geolocation")){
-  //  san.clearItem("geolocation");
-  //}
   if (branch.getBoolPref("sitesettings")){
     san.clearItem("siteSettings");
   }
