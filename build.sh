@@ -148,6 +148,6 @@ echo "Done!"
 $AFTER_BUILD
 
 if [ $PUSH_TO_DEVICE = 1 ]; then 
-  cp ./$APP_NAME.xpi /home/geo/Dropbox/Public/$APP_NAME.xpi
+  cp ./$APP_NAME.xpi /home/$USER/Dropbox/Public/$APP_NAME.xpi
   echo "Uploading..."
 fi
