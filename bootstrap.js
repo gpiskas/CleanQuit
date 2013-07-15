@@ -17,6 +17,7 @@ function isNativeUI() {
 function cleanAndQuit(window) {
   let branch = Services.prefs.getBranch(branchName);
 
+  window.NativeWindow.toast.show("Cleaning up...", "short");
   // Use the window's sanitizer to clean the session
   let san = null;
   var appInfo = Components.classes["@mozilla.org/xre/app-info;1"]
