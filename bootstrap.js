@@ -5,21 +5,21 @@ const Cu = Components.utils;
 Cu.import("resource://gre/modules/Services.jsm");
 
 var qQuitBtn = null;
-let gAddonData = null;
+var gAddonData = null;
 
 const branchName = "extensions.cleanquit.";
 
 function isNativeUI() {
-  let appInfo = Cc["@mozilla.org/xre/app-info;1"].getService(Ci.nsIXULAppInfo);
+  var appInfo = Cc["@mozilla.org/xre/app-info;1"].getService(Ci.nsIXULAppInfo);
   return (appInfo.ID == "{aa3c5121-dab2-40e2-81ca-7ea25febc110}");
 }
 
 function cleanAndQuit(window) {
-  let branch = Services.prefs.getBranch(branchName);
+  var branch = Services.prefs.getBranch(branchName);
 
   window.NativeWindow.toast.show("Cleaning up...", "short");
   // Use the window's sanitizer to clean the session
-  let san = null;
+  var san = null;
   var appInfo = Components.classes["@mozilla.org/xre/app-info;1"]
   		.getService(Components.interfaces.nsIXULAppInfo);
   var versionChecker = Components.classes["@mozilla.org/xpcom/version-comparator;1"]
@@ -59,8 +59,15 @@ function cleanAndQuit(window) {
   if (branch.getBoolPref("sessions")){
     san.clearItem("sessions");
   }
-  
-  Services.obs.notifyObservers(null, "Browser:Quit", "");
+
+  var pref = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
+  if (branch.getBoolPref("recenttabs")){
+    pref.setIntPref("browser.sessionhistory.max_entries",0);
+  } else {
+    pref.clearUserPref("browser.sessionhistory.max_entries");
+  }
+
+  window.BrowserApp.quit();
 }
 
 
@@ -69,7 +76,7 @@ function loadIntoWindow(window) {
     return;
 
   if (isNativeUI()) {
-    let iconUrl = gAddonData.resourceURI.spec + "icon.png";
+    var iconUrl = gAddonData.resourceURI.spec + "icon.png";
     qQuitBtn = window.NativeWindow.menu.add("CleanQuit", iconUrl, function() { cleanAndQuit(window); });
   }
 }
@@ -90,7 +97,7 @@ function unloadFromWindow(window) {
 var windowListener = {
   onOpenWindow: function(aWindow) {
     // Wait for the window to finish loading
-    let domWindow = aWindow.QueryInterface(Ci.nsIInterfaceRequestor).getInterface(Ci.nsIDOMWindowInternal || Ci.nsIDOMWindow);
+    var domWindow = aWindow.QueryInterface(Ci.nsIInterfaceRequestor).getInterface(Ci.nsIDOMWindowInternal || Ci.nsIDOMWindow);
     domWindow.addEventListener("load", function() {
       domWindow.removeEventListener("load", arguments.callee, false);
       loadIntoWindow(domWindow);
@@ -104,11 +111,11 @@ var windowListener = {
 function startup(aData, aReason) {
   gAddonData = aData;
 
-  let wm = Cc["@mozilla.org/appshell/window-mediator;1"].getService(Ci.nsIWindowMediator);
+  var wm = Cc["@mozilla.org/appshell/window-mediator;1"].getService(Ci.nsIWindowMediator);
   
   // Set up default prefs, bool only
-  let defaultBranch = Services.prefs.getDefaultBranch(branchName);
-  let scope = {
+  var defaultBranch = Services.prefs.getDefaultBranch(branchName);
+  var scope = {
     pref: function(pref, value){
       defaultBranch.setBoolPref(pref, value);
     }
@@ -116,9 +123,9 @@ function startup(aData, aReason) {
   Services.scriptloader.loadSubScript(aData.resourceURI.spec + "defaults/prefs.js", scope);
 
   // Load into any existing windows
-  let windows = wm.getEnumerator("navigator:browser");
+  var windows = wm.getEnumerator("navigator:browser");
   while (windows.hasMoreElements()) {
-    let domWindow = windows.getNext().QueryInterface(Ci.nsIDOMWindow);
+    var domWindow = windows.getNext().QueryInterface(Ci.nsIDOMWindow);
     loadIntoWindow(domWindow);
   }
 
@@ -132,18 +139,21 @@ function shutdown(aData, aReason) {
   if (aReason == APP_SHUTDOWN)
     return;
 
-  let wm = Cc["@mozilla.org/appshell/window-mediator;1"].getService(Ci.nsIWindowMediator);
+  var wm = Cc["@mozilla.org/appshell/window-mediator;1"].getService(Ci.nsIWindowMediator);
 
   // Stop listening for new windows
   wm.removeListener(windowListener);
 
   // Unload from any existing windows
-  let windows = wm.getEnumerator("navigator:browser");
+  var windows = wm.getEnumerator("navigator:browser");
   while (windows.hasMoreElements()) {
-    let domWindow = windows.getNext().QueryInterface(Ci.nsIDOMWindow);
+    var domWindow = windows.getNext().QueryInterface(Ci.nsIDOMWindow);
     unloadFromWindow(domWindow);
   }
 }
 
 function install(aData, aReason) {}
-function uninstall(aData, aReason) {}
+function uninstall(aData, aReason) {
+  var pref = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
+  pref.clearUserPref("browser.sessionhistory.max_entries");
+}

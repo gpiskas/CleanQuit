@@ -16,4 +16,5 @@
   <setting pref="extensions.cleanquit.downloads" type="bool" title="&downloads;"/>
   <setting pref="extensions.cleanquit.passwords" type="bool" title="&passwords;"/>
   <setting pref="extensions.cleanquit.sessions" type="bool" title="&sessions;"/>
+  <setting pref="extensions.cleanquit.recenttabs" type="bool" title="&recenttabs;"/>
 </window>
