@@ -18,6 +18,7 @@ function cleanAndQuit(window) {
   var branch = Services.prefs.getBranch(branchName);
 
   window.NativeWindow.toast.show("Cleaning up...", "short");
+
   // Use the window's sanitizer to clean the session
   var san = null;
   var appInfo = Components.classes["@mozilla.org/xre/app-info;1"]
@@ -59,15 +60,18 @@ function cleanAndQuit(window) {
   if (branch.getBoolPref("sessions")){
     san.clearItem("sessions");
   }
-
-  var pref = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
   if (branch.getBoolPref("recenttabs")){
-    pref.setIntPref("browser.sessionhistory.max_entries",0);
-  } else {
-    pref.clearUserPref("browser.sessionhistory.max_entries");
+    var tabs = window.BrowserApp.tabs;
+    tabs.forEach(function(tab) {
+      window.BrowserApp.closeTab(tab);
+    });
   }
 
-  window.BrowserApp.quit();
+  var prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
+                        .getService(Components.interfaces.nsIPromptService);
+  if (prompts.confirm(null, "Cleanup finished!", "Are you sure you want to quit?")){
+    window.BrowserApp.quit();
+  }
 }
 
 
@@ -153,7 +157,4 @@ function shutdown(aData, aReason) {
 }
 
 function install(aData, aReason) {}
-function uninstall(aData, aReason) {
-  var pref = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
-  pref.clearUserPref("browser.sessionhistory.max_entries");
-}
+function uninstall(aData, aReason) {}
