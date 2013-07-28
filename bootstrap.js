@@ -18,6 +18,7 @@ function cleanAndQuit(window) {
   var branch = Services.prefs.getBranch(branchName);
 
   window.NativeWindow.toast.show("Cleaning up...", "short");
+
   // Use the window's sanitizer to clean the session
   var san = null;
   var appInfo = Components.classes["@mozilla.org/xre/app-info;1"]
@@ -32,6 +33,12 @@ function cleanAndQuit(window) {
     san = Sanitizer;
   }
 
+  if (branch.getBoolPref("recenttabs")){
+    var tabs = window.BrowserApp.tabs;
+    tabs.forEach(function(tab) {
+      window.BrowserApp.closeTab(tab);
+    });
+  }
   if (branch.getBoolPref("cache")){
     san.clearItem("cache");
   }
@@ -60,14 +67,7 @@ function cleanAndQuit(window) {
     san.clearItem("sessions");
   }
 
-  var pref = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
-  if (branch.getBoolPref("recenttabs")){
-    pref.setIntPref("browser.sessionhistory.max_entries",0);
-  } else {
-    pref.clearUserPref("browser.sessionhistory.max_entries");
-  }
-
-  window.BrowserApp.quit();
+  window.setTimeout(window.BrowserApp.quit,0);
 }
 
 
@@ -153,7 +153,4 @@ function shutdown(aData, aReason) {
 }
 
 function install(aData, aReason) {}
-function uninstall(aData, aReason) {
-  var pref = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
-  pref.clearUserPref("browser.sessionhistory.max_entries");
-}
+function uninstall(aData, aReason) {}
