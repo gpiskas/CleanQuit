@@ -1,8 +1,8 @@
 CleanQuit
 =========
 
-A Firefox for Android extension. <br> https://addons.mozilla.org/en-US/android/addon/cleanquit/
+A Firefox extension for both Desktop and Android. <br>Android: https://addons.mozilla.org/en-US/android/addon/cleanquit/<br>Desktop: https://addons.mozilla.org/en-US/firefox/addon/cleanquit-desktop/
 
-Clean up the mess and quit! This extension brings back the good old quit button to life as well as the ability to clean what you wish (chosen from a list of options) at the same time.
+Clean up the mess and quit! Adds a CleanQuit button to firefox in order to clean up history and quit!
 
 CleanQuit <br> Copyright (C) 2013  George Piskas 

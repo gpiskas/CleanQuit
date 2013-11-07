@@ -1,0 +1,19 @@
+<!ENTITY cache "Clear cache">
+
+<!ENTITY cookies "Clear cookies">
+
+<!ENTITY sitesettings "Clear site preferences">
+
+<!ENTITY offlineapps "Clear offline apps">
+
+<!ENTITY history "Clear browsing history">
+
+<!ENTITY formdata "Clear form data">
+
+<!ENTITY downloads "Clear download history ">
+
+<!ENTITY passwords "Clear saved passwords">
+
+<!ENTITY sessions "Clear sessions">
+
+<!ENTITY recenttabs "Clear recent tabs">

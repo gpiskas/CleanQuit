@@ -1,0 +1,58 @@
+{
+  "name": "cleanquit-desktop",
+  "fullName": "CleanQuit (Desktop)",
+  "id": "jid1-89AP7HIeOhgCJw",
+  "description": "Adds a CleanQuit button to firefox in order to clean up history and quit!",
+  "author": "Geo Piskas",
+  "license": "MPL 2.0",
+  "version": "1.0",
+  "dependencies": ["vold-utils", "menuitems", "toolbar-button-complete", "addon-sdk"],
+  "preferences": [{
+		"type": "bool",
+		"name": "cache",
+		"value": true,
+		"title": "Clear Cache"
+	},
+	{
+		"type": "bool",
+		"name": "cookies",
+		"value": true,
+		"title": "Clear Cookies"
+	},
+	{
+		"type": "bool",
+		"name": "history",
+		"value": true,
+		"title": "Clear History"
+	},
+	{
+		"type": "bool",
+		"name": "formdata",
+		"value": true,
+		"title": "Clear Form Data"
+	},
+	{
+		"type": "bool",
+		"name": "downloads",
+		"value": true,
+		"title": "Clear Downloads"
+	},
+	{
+		"type": "bool",
+		"name": "passwords",
+		"value": false,
+		"title": "Clear Saved Passwords"
+	},
+	{
+		"type": "bool",
+		"name": "sessions",
+		"value": true,
+		"title": "Clear Sessions"
+	},
+	{
+		"type": "bool",
+		"name": "quit",
+		"value": true,
+		"title": "Quit after Clean"
+	}]
+}
